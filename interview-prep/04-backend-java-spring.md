@@ -1,6 +1,6 @@
 # Backend: Java 21 and Spring Boot
 
-Fix the inaccurate answers from recording 63, then keep banking/Spring patterns Virtusa and Fulcrum asked.
+Fix inaccurate answers from recordings 63–65, then keep banking/Spring patterns Virtusa and Fulcrum asked.
 
 ## `@SpringBootApplication` (they asked what it contains)
 
@@ -98,7 +98,7 @@ ACID is the **database transaction**, not the whole Saga. See [06-data-sql-acid-
 
 ## Java 21 features they quizzed
 
-**Records** — immutable named tuples. Compiler generates constructor, accessors (`amount()`, not `getAmount()` unless you customize), `equals`/`hashCode`/`toString`. **No setters.** Wrong answer in the interview: “Java creates getters and setters.” Use records for DTOs and event payloads, not for JPA entities (mutable + no-arg constructor needs).
+**Records** — immutable named tuples. Compiler generates constructor, accessors (`amount()`, not `getAmount()` unless you customize), `equals`/`hashCode`/`toString`. **No setters.** Recording 63 wrong: “Java creates getters and setters.” Recording 64 right: records drop boilerplate and are not deep-immutable if a component is a mutable `ArrayList`. Use records for DTOs and event payloads, not for JPA entities (mutable + no-arg constructor needs).
 
 **Sealed classes** — `sealed interface Payment permits CardPayment, AchPayment`. Exhaustive `switch`. Problem solved: uncontrolled subclasses of a domain type.
 
