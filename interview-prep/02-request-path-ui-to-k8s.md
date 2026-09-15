@@ -46,6 +46,10 @@ This is the zoom-in from HLD §§6–16. The user already **submitted** the cert
 
 **Do not say:** this is a distributed XA transaction, or that Kafka drives these six steps.
 
+**User-facing “async” (recording 67):** `POST` returns **201** with status `CREATED`. The customer does not wait for TES. A CronJob (you said ~30 minutes — use the real schedule) later runs the Saga. That is **async to the user**, still **synchronous HTTP steps inside the job**. It is not Kafka.
+
+**Avalara vs plugin (only if true):** some products email a link to **Avalara** (transcript: “Alvara”) to upload the certificate, 30-day window, **one open request**. After vendor verification, status moves in-progress → completed and other services update. If your HLD is **in-plugin upload + S3**, do not add Avalara. If both exist, say: create in QuickBooks → cert in Avalara → our job consumes verified status → TES Saga.
+
 ## Authentication vs authorization
 
 | | Authentication | Authorization |
@@ -66,6 +70,7 @@ This is the zoom-in from HLD §§6–16. The user already **submitted** the cert
 - Sync **user** calls: short, read/write that must return now.
 - Sync **service-to-service**: OpenFeign/WebClient with timeouts.
 - Async **when** work is long or multiple consumers need the event (not this Saga).
+- Rec 67 listed gateway, LB, rate limit, Redis, SOLID, Docker — those are **platform**, not REST design. Lead with resources, status codes, idempotency, then Feign.
 
 ## GraphQL vs REST in the same product
 

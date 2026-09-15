@@ -19,6 +19,8 @@ Other names they may want: Database-per-service, Saga, Circuit breaker, Outbox (
 
 **Cron is not Kafka.** Cron is “time triggered.” Kafka is “event triggered.”
 
+Recording 67 called the tax-exemption Saga “asynchronous communication.” Correct split: **201 to the user immediately**; **Cron later**; **each Saga step is still a sync HTTP call**. Kafka would be if TES published events and a consumer reacted.
+
 ## Why Cron jobs (ASTON Q7)
 
 Manual care-agent processing did not scale and was error-prone. A CronJob polls **pending** exemption requests and runs the pipeline so customers self-serve and we control load on TES. Also: overnight reconciliation, statement generation — pick real examples only.
@@ -51,11 +53,12 @@ Retry **transient** failures: 502, timeout, `429`. Do **not** retry 400 validati
 
 Pattern: exponential backoff + jitter + max attempts. At the HTTP client or Resilience4j `Retry`.
 
-**Acknowledgement:**
+**Acknowledgement (recording 67 mixed this with tracing):**
 
 - **HTTP:** success status is the ack; on timeout you **do not know** if TES committed → must be idempotent on retry.
 - **Kafka:** consumer `commit` offset after processing. Commit too early → lost message. Commit too late + crash → duplicate → idempotent handler.
 - **Kafka producer acks:** `acks=0` fire-forget; `acks=1` leader only; `acks=all` (or `-1`) ISR — durability vs latency. For payments-like data, `acks=all` + idempotent producer.
+- **Correlation / tracing id** (transcript “tides”): gateway header so Splunk can stitch hops. **Not** the Kafka ack, and you do not persist it in Mongo “because the app is small.” We already log it.
 
 ## Circuit breaker (fix half-open)
 
@@ -69,7 +72,7 @@ Resilience4j / similar. Protects **the caller** from a sick dependency.
 
 Fallback: stale cache, default message, queue for later — **never** “approved.” Retry inside an open breaker makes outages worse. Order: timeout → retry a few times → breaker counts failures.
 
-You mixed “gates” in the interview. Use **Closed / Open / Half-open** only.
+You mixed “gates” and “half-state” (rec 63 and 67). Use **Closed / Open / Half-open** only. `@Retry` is Resilience4j/Spring Retry — **separate** from the breaker. Do not retry while **open**.
 
 ## Kafka (ASTON Q8, high performance)
 
@@ -82,6 +85,8 @@ You mixed “gates” in the interview. Use **Closed / Open / Half-open** only.
 - **Poison message:** max retries then dead-letter topic; do not block the partition forever.
 
 You: “I have worked on the consumer side — processing records, committing offsets, keeping handlers idempotent.” Do not design a 50-partition cluster if you did not.
+
+**Recording 67 wrong picture:** a producer does **not** “split a large file upload into topics.” One **topic** has **partitions**; the producer sends **records** (optionally keyed). The broker does not “look up consumers and push a job.” Consumers **poll**; the group coordinator assigns partitions. Retry + DLQ is for poison messages, not “the circuit breaker gate.”
 
 ## Redis strategy (recording 65 — stay honest)
 

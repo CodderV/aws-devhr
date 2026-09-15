@@ -39,52 +39,54 @@ Implement only what they asked. Exception handling: catch specific, wrap in doma
 
 ---
 
-## ASTON (9/11/2026) + “most technical questions”
+## ASTON / Recording 67 (2026-09-11, ~53 min)
 
-**1. Yourself and stack** — 90s intro in [01](01-intro-and-accuracy.md).
+Same question list as “most technical questions.” ASR names you **Puevo Patel**; tools came out **Cloud Board / Cursory**. Speak **Vaibhav**, **Claude**, **Cursor**.
 
-**2. Cloud AWS/Azure/GCP** — K8s/IKS daily; AWS-hosted apps; not a solutions architect. See [07](07-docker-k8s-cicd-aws.md).
+**1. Yourself and stack** — 90s intro in [01](01-intro-and-accuracy.md). Do not ramble MCP in the intro.
 
-**3. AI tools** — Cursor/Claude for migration and navigation; I still own production behavior. [01](01-intro-and-accuracy.md).
+**2. Cloud AWS/Azure/GCP** — AWS-hosted / CloudWatch / S3; **not Azure**. Day to day is K8s. [07](07-docker-k8s-cicd-aws.md).
+
+**3. AI tools** — Cursor + Claude for coding and Java 21 refresh; MCP only if you used it; no LLM training; paid tools if that is policy. [01](01-intro-and-accuracy.md).
 
 **4. Scalable backend challenges**  
-Traffic: stateless pods + HPA. Data: indexes, pagination. Downstream: timeouts, CB. Consistency: local ACID vs Saga for TES. Humans: overlapping Cron and duplicate TES customers — locks + idempotency.
+Keep: Java 8→21, records/sealed, React class→function + TS, GraphQL instead of fat REST, Splunk + Chrome perf, indexes/native SQL, smaller bundles.  
+Drop unless true: virtual threads in prod, GraalVM made Boot 3 faster.  
+Also valid: HPA, CB, Cron overlap, TES idempotency.
 
-**5. REST in microservices + communication**  
-Nouns/verbs, gateway routing, Feign with timeouts, async only when we need events. [02](02-request-path-ui-to-k8s.md), [05](05-distributed-microservices.md).
+**5. REST + communication** — `POST /exemption-requests`, 201, GET by id, Feign timeouts. Then gateway, rate limit, Redis, LB. Rec 67 skipped the resource design. [02](02-request-path-ui-to-k8s.md).
 
-**6. Sync vs async** — HTTP waits; Kafka does not. Cron is time-based, not Kafka. [05](05-distributed-microservices.md).
+**6. Sync vs async** — HTTP waits. User create = 201. Cron + orchestration Saga = deferred work. **Not** Kafka for those six steps. [05](05-distributed-microservices.md).
 
-**7. Why Cron** — remove care-agent manual exemption processing; controlled batch to TES. [02](02-request-path-ui-to-k8s.md).
+**7. Why Cron** — care-agent manual work did not scale; batch to TES. Optional **only if true**: email + Avalara cert window + one open request. [02](02-request-path-ui-to-k8s.md).
 
-**8. Kafka topics, transport, consumers** — topic/partition/consumer group/offset; key for ordering; `acks=all` for durability. I have been on the **consumer** side. [05](05-distributed-microservices.md).
+**8. Kafka** — topic / partition / consumer group / offset / poll. Rec 67 “split file into topics, broker finds consumers” is wrong. [05](05-distributed-microservices.md).
 
-**9. Retry** — transient only, backoff, max attempts, idempotent body. [05](05-distributed-microservices.md).
+**9. Retry** — `@Retry` / Resilience4j on **transient** errors. Circuit breaker is **Closed/Open/Half-open**, not gates. Do not retry in **open**. [05](05-distributed-microservices.md).
 
-**10. How ack is passed** — HTTP status; Kafka consumer commit after work; producer `acks`. Timeout means unknown → idempotency. [05](05-distributed-microservices.md).
+**10. Ack** — HTTP status or Kafka commit. Correlation id is tracing (Splunk). Not Mongo key-value “because we are small.” [05](05-distributed-microservices.md), [08](08-observability-prod.md).
 
-**11–12. Docker + benefits** — image vs container; same artifact from laptop CI to K8s. [07](07-docker-k8s-cicd-aws.md).
+**11–12. Docker** — Dockerfile, same digest, pods scale. Not “Docker YAML” unless Compose local. [07](07-docker-k8s-cicd-aws.md).
 
-**13. AWS design, scale, reliability** — ALB, multi-AZ, RDS, cache, rolling/EKS; my depth is app on K8s. [07](07-docker-k8s-cicd-aws.md).
+**13. AWS** — S3, CloudWatch, K8s reliability story. Kinesis/Lambda/Spring Cloud AWS only if shipped. [07](07-docker-k8s-cicd-aws.md).
 
 **14. React or Angular** — React ~4 years Intuit; Angular 8 Discover.
 
-**15. State management + performance (they said Angular; map to what you did)**  
-Discover: services + component state, pagination. Intuit plugin: Context/useReducer + Apollo; SUBS-UI: RTK Query. Performance: pagination, GraphQL fields, CDN, flags. [03](03-frontend.md), [01](01-intro-and-accuracy.md) contradiction sheet.
+**15. Angular state + perf** — services + RxJS, pagination, `async` pipe. Not “engine model.” [03](03-frontend.md).
 
 **16. Able to write lots of code?** — Yes, but live syntax without an assistant is something I drill. Then do the exercise.
 
-**17. Streams grouping** — gold in [06](06-data-sql-acid-streams.md) and [10](10-live-coding-drills.md).
+**17. Streams grouping** — you narrated the four steps well. Type the gold in [10](10-live-coding-drills.md). Prefer `BigDecimal`, not `summingDouble`.
 
-**18. Stored proc vs function + exceptions** — [06](06-data-sql-acid-streams.md).
+**18. Stored proc vs function + exceptions** — table in [06](06-data-sql-acid-streams.md). Do **not** answer with `@ControllerAdvice`.
 
-**19–20. SQL + top 3 customers** — `GROUP BY`, `SUM`, `ORDER BY total DESC LIMIT 3`.
+**19–20. SQL top 3** — `GROUP BY`, `SUM`, `ORDER BY total DESC LIMIT 3`. `DENSE_RANK` if they want ties. You had this.
 
-**21. ACID use case** — fund transfer. [06](06-data-sql-acid-streams.md).
+**21. ACID** — fund transfer. Durability = commit/WAL, not “East and Central regions” (that is HA). [06](06-data-sql-acid-streams.md).
 
-**22. AI contribution besides programming** — adoption, review bar, tech-refresh speed — not model training. [01](01-intro-and-accuracy.md).
+**22. AI besides programming** — adoption and review bar; Cypress-from-Claude is trial; not fraud ML. [01](01-intro-and-accuracy.md).
 
-**23–24. Position / customer-facing** — Answer from the JD; your history is customer-facing finance UIs plus backend.
+**23–24. Position / customer-facing** — JD is Java + Angular lead-ish; your history is customer-facing finance UIs plus backend + agile.
 
 **25. Mentor juniors** — yes. [01](01-intro-and-accuracy.md).
 

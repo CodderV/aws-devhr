@@ -19,6 +19,8 @@ I also mentor juniors, do code reviews, and use Cursor and Claude at Intuit for 
 - Do not say you migrated “Java 16 to Java 18.” That was React 16 to 18.
 - Do not list Kafka, Redux Toolkit, and AWS as if every Intuit workflow uses all of them.
 - Do not call the personal banking capstone a production system.
+- Do not say **Cloud Board** or **Cursory** — the tools are **Claude** and **Cursor**.
+- Do not claim **GraalVM native**, **virtual threads in prod**, **Kinesis**, or **Lambda** unless you shipped them.
 
 ## Clean migration stories (pick one when asked)
 
@@ -42,6 +44,10 @@ Interviewers compare your resume to what you say. Use **one sentence per project
 | Redis | Cache on resume | Rec 65: “Hibernate second-level cache” + “session LRU” + called `useReducer` a cache | “Redis is a shared store: session or hot reads with **TTL**. Hibernate L2 only if we actually wired it. React `useReducer` is UI state, not a cache.” |
 | Vault | Secrets | Rec 65: “OAuth2 link to HashiCorp container” | “Secrets live in **Vault** (or K8s Secret from Vault). The app reads env/file at startup. User login is JWT/OAuth2 — that is not how Vault is configured.” |
 | Title | Senior Lead | Rec 65 mixed lead vs IC | “Title is Senior Lead; on Intuit I am an IC delivering features. I mentor and review; I do not run the Intuit sprint process.” |
+| AI tool names | Cursor, Claude | Rec 67 ASR: Cloud Board, Cursory, “the skin” + MCP | “**Cursor** and **Claude**. I have used MCP servers in Cursor when we wired them. I have not trained LLMs. Cypress generation is an experiment, not my production test strategy.” |
+| Java 21 extras | Records, sealed | Rec 67: virtual threads + GraalVM made Spring 3 faster | “Records and sealed classes we adopted. Virtual threads and GraalVM native I will mention only if we actually enabled them — otherwise ‘evaluated, not in my services.’” |
+| Exemption UX | Plugin upload + Cron Saga (HLD) | Rec 67: email → Avalara/Alvara portal, 30 days, one open request, cron every 30 min | Pick **one** true path. If Avalara verifies the cert, say that after `201` create. If the PDF is plugin upload into S3 then Saga, say that. Do not mix both. |
+| Kafka ack | Consumer commit / producer acks | Rec 67: correlation id / “tides”, store in Mongo for large systems | Correlation id is **tracing**, not Kafka ack. Ack = HTTP status or offset commit. [05](05-distributed-microservices.md). |
 
 ## 2-minute architecture (HLD §21, your voice)
 
@@ -59,7 +65,7 @@ I mentor by pairing on the first ticket in a new area, then reviewing PRs for de
 
 ## AI tools (ASTON questions 3 and 22)
 
-I use **Cursor and Claude** at Intuit for Java 21 mechanical migration, boilerplate tests, and navigating large plugin repos. I do not treat generated code as correct: I still own contracts, idempotency, and production behavior. I have not trained foundation models. My contribution is **safe adoption**: faster refactors with the same review bar.
+I use **Cursor and Claude** at Intuit for Java 21 mechanical migration, boilerplate tests, and navigating large plugin repos. If asked about MCP: “Cursor can talk to MCP servers for repo or browser context; I still review the diff.” I do not treat generated code as correct: I still own contracts, idempotency, and production behavior. I have not trained foundation models and I do not do fraud-detection ML. Cypress-from-AI is **trial**, not how we gate releases. Paid tools only if that is policy — say so. My contribution is **safe adoption**: faster refactors with the same review bar.
 
 ## Leadership besides code
 
@@ -70,6 +76,6 @@ I use **Cursor and Claude** at Intuit for Java 21 mechanical migration, boilerpl
 ## Practice checklist
 
 - [ ] 90s intro under 100 seconds
-- [ ] Contradiction sheet: Redux, Kafka, cloud, capstone, Redis vs useReducer, Vault vs OAuth2
+- [ ] Contradiction sheet: Redux, Kafka, cloud, capstone, Redis, Vault, Cursor/Claude names, Avalara vs plugin, ack vs correlation id
 - [ ] Mentoring in 45 seconds
 - [ ] AI answer without saying “AI built the feature”

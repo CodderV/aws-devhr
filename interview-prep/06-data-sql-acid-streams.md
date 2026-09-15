@@ -9,7 +9,7 @@ Debit A and credit B in **one** database transaction.
 - **Atomicity** — both accounts update or neither. No lost money.
 - **Consistency** — constraints: non-negative balance, `debit + credit = 0` in the ledger pair.
 - **Isolation** — concurrent transfers do not overdraw; use row locks or `SELECT FOR UPDATE` on account rows.
-- **Durability** — after commit, a crash does not lose the transfer (WAL/commit).
+- **Durability** — after commit, a crash does not lose the transfer (WAL/commit). Multi-AZ / another region is **high availability**, a way to keep durability after a datacenter loss — not the definition of D.
 
 **Saga is not ACID across TES + your DB.** Only each local transaction is ACID.
 
@@ -23,6 +23,8 @@ Debit A and credit B in **one** database transaction.
 | Exceptions (MySQL) | `DECLARE EXIT HANDLER FOR SQLEXCEPTION` then rollback | Functions are more limited; prefer procs for transactional workflows |
 
 Oracle: functions can be used in SQL if they obey purity rules; procs for DML batches.
+
+**Recording 67:** you answered **Spring** `@ControllerAdvice` instead of SQL. If they ask MySQL exceptions, say `DECLARE EXIT HANDLER FOR SQLEXCEPTION` then `ROLLBACK` in the proc. Spring advice is a **different** question.
 
 ## Second-highest salary (recording 63)
 

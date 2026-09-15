@@ -37,9 +37,9 @@ Use this as the spine, then zoom into tax exemption. Full script is in [01-intro
 | [06-data-sql-acid-streams.md](06-data-sql-acid-streams.md) | SQL, ACID, Streams |
 | [07-docker-k8s-cicd-aws.md](07-docker-k8s-cicd-aws.md) | Delivery stack |
 | [08-observability-prod.md](08-observability-prod.md) | Splunk, correlation ID, RCA |
-| [09-question-bank.md](09-question-bank.md) | Fulcrum, LTI, ASTON, Virtusa, recordings 63–65 |
+| [09-question-bank.md](09-question-bank.md) | Fulcrum, LTI, ASTON/rec 67, Virtusa, recordings 63–65 |
 | [10-live-coding-drills.md](10-live-coding-drills.md) | Timed problems + gold solutions |
 
 ## Out of scope
 
-Recording 67 was an image PDF and is not transcribed here. If you paste that transcript later, patch [09-question-bank.md](09-question-bank.md). Recordings 64 (2026-09-11) and 65 (2026-09-15) are in the question bank.
+All pasted transcripts (63, 64, 65, 67) are in [09-question-bank.md](09-question-bank.md). Recording 67 is the ASTON round (2026-09-11).

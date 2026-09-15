@@ -46,6 +46,8 @@ We use **micro-frontends as plugins/widgets**. App fabric / portal composes inde
 
 Class components/services, `*ngIf`/`*ngFor`, `async` pipe for observables, change detection. State: lift to a service with `BehaviorSubject` unless you truly used NgRx. Performance: `OnPush`, trackBy, pagination. Do not mix Angular vocabulary into a React coding round.
 
+**Recording 67 “engine model”:** they heard **NgModel** / **NgModule**. Say: “**NgModule** (or standalone components in later Angular) for compilation units. State was **services + RxJS**, not two-way binding as the architecture. Pagination for large lists. `async` pipe so we unsubscribe.” If you never used NgRx, do not invent it.
+
 ## Timed drill (also in file 10)
 
 Drivers age ≥ 18, sort by age ascending, vehicles by premium ascending, buttons add/remove from a board. Gold pattern:

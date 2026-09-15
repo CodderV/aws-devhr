@@ -73,6 +73,10 @@ ASTON asked Docker benefits and AWS scalability. Virtusa asked docker image. Rec
 
 If they drill VPC/CIDR and you are weak: “I partner with platform teams on account-level networking; I own the app Deployment, probes, and autoscaling policies.”
 
+**Recording 67 extras — only if true:** S3 + CloudWatch you already use. **Kinesis** “is like Kafka” as trivia, not “I designed Kinesis.” **Lambda** only for a function you shipped. **Spring Cloud AWS** only if the service uses it. Do not list them to sound cloud-native.
+
+**GraalVM (rec 67):** Spring Boot 3 *can* native-image. That is a separate program, not “Boot 3 made us faster because GraalVM.” Java 21 + Tomcat on K8s is the default story.
+
 ## Connecting the delivery path to Path A
 
 Developer → PR → Jenkins tests (Jest/JUnit, Sonar) → image or plugin version → pre-prod → Argo/K8s → prod → Splunk dashboards/alerts. Same artifact through the pipeline is the Docker benefit they want.
