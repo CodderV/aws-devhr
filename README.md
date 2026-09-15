@@ -1,5 +1,7 @@
 # Welcome to your CDK TypeScript project!
 
+Interview preparation (docs only): start at [interview-prep/00-how-to-use.md](interview-prep/00-how-to-use.md).
+
 This is a blank project for TypeScript development with CDK.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
