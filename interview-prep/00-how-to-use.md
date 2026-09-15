@@ -13,8 +13,8 @@ This kit is for **Vaibhav Patil**: 12 years Java + React/Angular, banking and fi
 
 | Day | Focus | Files | Exit criteria |
 | --- | --- | --- | --- |
-| 1 | Java Streams + HashMap + Records | [10-live-coding-drills.md](10-live-coding-drills.md), [04-backend-java-spring.md](04-backend-java-spring.md) | First non-repeating character and customer-totals in under 10 minutes |
-| 2 | React live coding + SQL top-N | [03-frontend.md](03-frontend.md), [06-data-sql-acid-streams.md](06-data-sql-acid-streams.md), drills | Filter/sort/map table + add/remove; second-highest salary; top-3 customers |
+| 1 | Java Streams + HashMap + Records | [10-live-coding-drills.md](10-live-coding-drills.md), [04-backend-java-spring.md](04-backend-java-spring.md) | First non-repeating **and** least-repeated character; customer-totals; all under 10 minutes each |
+| 2 | React live coding + SQL top-N | [03-frontend.md](03-frontend.md), [06-data-sql-acid-streams.md](06-data-sql-acid-streams.md), drills | Filter/sort/map table + add/remove; second- **and** third-highest salary; top-3 customers |
 | 3 | Intro + request path UI → K8s | [01-intro-and-accuracy.md](01-intro-and-accuracy.md), [02-request-path-ui-to-k8s.md](02-request-path-ui-to-k8s.md) | Recite 90s intro and interactive request path without notes |
 | 4 | Cron/Saga + resilience | HLD PDF §§6–16, [05-distributed-microservices.md](05-distributed-microservices.md) | Happy path, failure + compensate, overlap guard, retry vs CB |
 | 5 | Docker, K8s, CI/CD, AWS | [07-docker-k8s-cicd-aws.md](07-docker-k8s-cicd-aws.md) | Image vs container, CronJob `Forbid`, Jenkins plugin version, honest AWS |
@@ -37,9 +37,9 @@ Use this as the spine, then zoom into tax exemption. Full script is in [01-intro
 | [06-data-sql-acid-streams.md](06-data-sql-acid-streams.md) | SQL, ACID, Streams |
 | [07-docker-k8s-cicd-aws.md](07-docker-k8s-cicd-aws.md) | Delivery stack |
 | [08-observability-prod.md](08-observability-prod.md) | Splunk, correlation ID, RCA |
-| [09-question-bank.md](09-question-bank.md) | Fulcrum, LTI, ASTON, Virtusa, recording 63 |
+| [09-question-bank.md](09-question-bank.md) | Fulcrum, LTI, ASTON, Virtusa, recordings 63–65 |
 | [10-live-coding-drills.md](10-live-coding-drills.md) | Timed problems + gold solutions |
 
 ## Out of scope
 
-Recordings 65 and 67 were image PDFs and are not transcribed here. If you paste those transcripts later, patch [09-question-bank.md](09-question-bank.md).
+Recording 67 was an image PDF and is not transcribed here. If you paste that transcript later, patch [09-question-bank.md](09-question-bank.md). Recordings 64 (2026-09-11) and 65 (2026-09-15) are in the question bank.

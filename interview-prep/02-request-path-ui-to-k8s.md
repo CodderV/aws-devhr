@@ -57,6 +57,8 @@ This is the zoom-in from HLD §§6–16. The user already **submitted** the cert
 
 **Interview line:** “If the UI hides tax exemption but the API accepts the mutation, that is a security bug. We enforce on the service.”
 
+**JWT shape (recordings 64–65):** login → identity service verifies credentials → **JWT** (header, **payload** with subject/roles, **signature**). Browser stores cookie or `Authorization: Bearer`. Gateway checks signature/expiry; **each service** still checks role for the operation. Filter 401 vs controller advice: [04-backend-java-spring.md](04-backend-java-spring.md).
+
 ## REST design in this architecture (ASTON Q5)
 
 - Resource names, nouns, HTTP verbs: `POST /exemption-requests`, `GET /exemption-requests/{id}`.

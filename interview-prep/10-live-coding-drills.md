@@ -52,6 +52,31 @@ return null;
 
 ---
 
+## Drill 1b — Least-repeated character (recording 64)
+
+**Problem:** Return a character with the **minimum frequency**. Empty → `null`. If several share the min count, return the **first in insertion order**.
+
+**Say aloud:** Count with `LinkedHashMap`, then `min` by value. If they wanted first unique, `count == 1` instead.
+
+**Gold:**
+
+```java
+static Character leastRepeated(String s) {
+    if (s == null || s.isEmpty()) return null;
+    Map<Character, Long> counts = s.chars()
+            .mapToObj(c -> (char) c)
+            .collect(Collectors.groupingBy(c -> c, LinkedHashMap::new, Collectors.counting()));
+    return counts.entrySet().stream()
+            .min(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .orElse(null);
+}
+```
+
+`leastRepeated("ABBAAC")` → `C` (A=3, B=2, C=1). If the interviewer used a name that prints `B`, walk the counts out loud before coding.
+
+---
+
 ## Drill 2 — Successful transaction totals (ASTON Q17)
 
 **Problem:** `customerId`, `date`, `amount`, `status`. Ignore failed. Group by customer. Sum. Keep totals **greater than 1**.
@@ -170,6 +195,19 @@ Alternate: `SELECT DISTINCT salary FROM employee ORDER BY salary DESC LIMIT 1 OF
 
 ---
 
+## Drill 4b — SQL third-highest salary (recording 64)
+
+```sql
+SELECT salary
+FROM (
+  SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+  FROM employee
+) t
+WHERE rnk = 3;
+```
+
+---
+
 ## Drill 5 — Top 3 customers by order amount
 
 ```sql
@@ -211,9 +249,11 @@ Array of buckets → hash & mask → equals → collide list → tree if long. R
 
 | Drill | Time | Done without hints |
 | --- | --- | --- |
-| 1 Streams unique char | /10 min | |
+| 1 Streams unique + least-repeated | /10 min | |
 | 2 Tx grouping | /10 min | |
 | 3 React board | /15 min | |
-| 4–5 SQL | /5 min | |
+| 4–5 SQL 2nd/3rd + top 3 | /5 min | |
 | Recite CB states | /1 min | |
 | Recite Path A + Path B | /3 min | |
+| Recite memo vs useMemo vs useCallback | /1 min | |
+| Recite JWT 401 vs @RestControllerAdvice | /1 min | |

@@ -166,6 +166,90 @@ Discover: services + component state, pagination. Intuit plugin: Context/useRedu
 
 ---
 
+## Recording 64 (2026-09-11) — Java 21, immutability, live Streams + SQL
+
+~28 minutes. Live coding: **least-repeated character** and **third-highest salary**.
+
+**Java version** — Java 21 now; came from 8. Spring Boot 2 → 3 needed 17; platform chose 21. Records + sealed where they fit. [04](04-backend-java-spring.md).
+
+**Record benefits** — drop POJO boilerplate; canonical constructor; accessors; `equals`/`hashCode`/`toString`; **immutable references**. Not “Java generates setters.”
+
+**Are records 100% immutable?** — **No.** If a component is a mutable `List`, callers can mutate it. Defensive copy in the compact constructor, or use unmodifiable lists.
+
+**What immutable means** — object state cannot change after construction. Security example: a leaked mutable connection config could be altered; an immutable value cannot.
+
+**Custom immutable class** — `final` class, `private final` fields, constructor that assigns them, getters only, **defensive copies** of collections. Constructor is usually **public** (or a public factory). Private constructor without a factory is a trap. [04](04-backend-java-spring.md).
+
+**`@Bean` vs `@Component`** — scan vs factory method; you do not put both on one class. [04](04-backend-java-spring.md).
+
+**`@Transactional` on private** — **no**. Proxy + public method. Default rollback = unchecked; checked needs `rollbackFor`. You already had this right — keep it tight. [04](04-backend-java-spring.md).
+
+**Least-repeated character (live)** — confirm: lowest count, not first unique. `groupingBy` + `LinkedHashMap` + `min(comparingByValue)`. Gold in [10](10-live-coding-drills.md).
+
+**Secure REST** — JWT/OAuth2; token in cookie or `Authorization`; Spring Security validates; roles in payload; **service still authorizes**. [02](02-request-path-ui-to-k8s.md).
+
+**API Gateway vs load balancer** — gateway = **entry + routing + cross-cutting** across *different* services. Load balancer = **spread traffic across instances of the same service**. You can have both (LB in front of gateway, or service mesh).
+
+**Pagination 2000 rows** — **always backend** `limit`/`offset` (or cursor). UI-only pagination still downloads 2000 rows. You answered this well — keep it.
+
+**Third-highest salary** — `DENSE_RANK() = 3`. [06](06-data-sql-acid-streams.md).
+
+---
+
+## Recording 65 (2026-09-15) — serialization, scopes, Redis, CI/CD, React hooks, JWT
+
+~40 minutes. Several answers were directionally right and **worded wrong**. Speak the lines below, not the transcript.
+
+**Intro / years / structure** — 90s script in [01](01-intro-and-accuracy.md). Frontend: React ~4 years, Angular ~3. Backend 12. Tax exemption = plugin + K8s Cron + orchestration Saga. S3 (or equivalent object store) for **certificates**.
+
+**Title** — Senior Lead on paper; **IC** on Intuit. [01](01-intro-and-accuracy.md).
+
+**Serialization** — Java `Serializable` for object streams; `transient` hides a field. REST APIs: Jackson `@JsonIgnore`. [04](04-backend-java-spring.md).
+
+**A serializable → B → C** — **yes**, C serializes.
+
+**Prevent C** — `writeObject`/`readObject` throw `NotSerializableException`. Not “override serializable.”
+
+**Bean scopes** — default **singleton**; also prototype, request, session. [04](04-backend-java-spring.md).
+
+**Caching** — Redis with **TTL** (sessions or cache-aside). LRU only if `maxmemory-policy` is LRU. **`useReducer` is not caching.** [05](05-distributed-microservices.md), [03](03-frontend.md).
+
+**Microservice patterns** — Saga, API gateway, circuit breaker, retry, fallback. Do not bundle retry/fallback as “callbacks.” [05](05-distributed-microservices.md).
+
+**Docker / K8s / AWS** — ~5 years containers; AWS shallow: **S3 certificates**, CloudWatch if used. [07](07-docker-k8s-cicd-aws.md).
+
+**CI/CD** — Git → Jenkins (exploring GHA) → test → **Dockerfile** image → registry → K8s (Argo CD GitOps). Ingress routes host/path to a Service. Horizontal scale = more replicas, not “ports deploy containers.”
+
+**Validate image** — CI tests + successful image build (+ scan). Argo health is **deploy** validation, not build validation.
+
+**Argo CD** — GitOps sync + UI for health/rollback. You may only use the dashboard; still say GitOps.
+
+**K8s files** — Deployment, Service, Ingress, CronJob. Honest: platform did one-time setup.
+
+**Local** — Spring Boot run, compose, Swagger. Good — keep.
+
+**Why Docker** — parity across env. Good — keep.
+
+**React process** — plugins, app fabric pin, React 16→18, TS, GraphQL fields, drop dead deps. [03](03-frontend.md).
+
+**`useReducer`** — action-driven UI state, not “which component to trigger after API.”
+
+**Redux** — know it; daily plugin is Context + reducer; RTK on SUBS-UI. [01](01-intro-and-accuracy.md).
+
+**`useEffect`** — after-render side effect; **not** a page reload. `[]` = mount once.
+
+**`useMemo` vs `React.memo`** — value vs component. You had only used `useMemo` — learn the one-liner in [03](03-frontend.md).
+
+**Vault** — secret store for the **workload**. K8s/AppRole into Vault. Not “OAuth2 link to the Vault container.” User JWT is separate. [07](07-docker-k8s-cicd-aws.md).
+
+**OAuth2 + JWT** — login → JWT (payload + signature) → filter validates → roles. Good skeleton; do not say the filter throws to `@ExceptionHandler`.
+
+**Exceptions** — `@RestControllerAdvice` for controllers. JWT layer: **AuthenticationEntryPoint 401**. [04](04-backend-java-spring.md).
+
+**`@RestControllerAdvice` for JWT** — usually **no**. Entry point / access-denied handler. Resolver-from-filter only if they push.
+
+---
+
 ## HLD PDF §20 — keep using your existing guide
 
 Orchestration vs choreography, create-then-DB-fail, duplicate customer, retryable errors, reverse compensate, context contents, Cron overlap, Splunk Saga, introducing Kafka later, compensation vs rollback, Redis vs DB, CB/fallback, UI hide vs API authZ.

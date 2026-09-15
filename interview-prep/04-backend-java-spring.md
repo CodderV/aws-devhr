@@ -26,9 +26,66 @@ void totalsIgnoreFailed() {
 
 `@WebMvcTest` slices the web layer and `@MockBean` the service. DI makes the controller not call `new TesClient()` internally, so you can assert retries without hitting TES.
 
+## Bean scopes (recording 65)
+
+| Scope | Meaning |
+| --- | --- |
+| **singleton** (default) | One instance per Spring container |
+| **prototype** | New instance every injection |
+| **request** | One per HTTP request (web) |
+| **session** | One per HTTP session (web) |
+| application / websocket | Servlet context / WS session |
+
+Stateless services stay **singleton**. Prototype for a mutable helper that must not be shared. Do not make a singleton hold request-specific fields.
+
+## `@Component` vs `@Bean` (recording 64)
+
+Both produce Spring beans. You do **not** need both on the same class.
+
+- **`@Component`** (and `@Service`, `@Repository`, `@Controller`) — Spring **scans** *your* class and constructs it. Prefer constructor injection.
+- **`@Bean`** — a method on a `@Configuration` class that **returns** an object. Use it for types you cannot annotate (third-party clients, `RestClient`, `ObjectMapper` tweaks) or when construction needs custom code.
+
 ## Global exception handling
 
 `@RestControllerAdvice` + `@ExceptionHandler`. Map domain exceptions to 404/409/422; unexpected to 500 with correlation id, never a stack trace to the client.
+
+## JWT / filter exceptions (recording 65 — do not send these to `@ExceptionHandler`)
+
+The JWT filter runs in the **servlet filter chain**, before `DispatcherServlet`. `@RestControllerAdvice` **does not** see those exceptions unless you forward them on purpose.
+
+Say this:
+
+1. Invalid or missing token → **`AuthenticationEntryPoint`** → **401**.
+2. Authenticated but forbidden → **`AccessDeniedHandler`** → **403**.
+3. Expired token is still an authentication failure (401), not a controller exception.
+4. Controller/service exceptions (business 404/409) stay on `@RestControllerAdvice`.
+
+If they insist on advice: you can call `HandlerExceptionResolver.resolveException(...)` from the filter, but the standard Spring Security answer is entry point + denied handler. `@PreAuthorize` failures are method security, also translated by `ExceptionTranslationFilter`, not by a custom exception class thrown from the filter.
+
+## Java serialization vs JSON (recording 65)
+
+Interviewers often mean **Java `Serializable`**, while production APIs use **Jackson JSON**.
+
+**Java serialization:** `implements Serializable` + `ObjectOutputStream`. `transient` skips a field (password). Add `serialVersionUID`.
+
+**Inheritance:** if class A implements `Serializable`, B and C that extend it **are serializable** even if they do not declare it.
+
+**Stop C from serializing:** you cannot “un-implement” `Serializable`. In C, implement `private void writeObject(ObjectOutputStream out)` and `readObject` and **throw `NotSerializableException`**. `transient` on fields is not enough to block the whole type. Do not say “override the serializable method.”
+
+**REST/JSON (what you actually ship):** `@JsonIgnore` / `@JsonIgnoreProperties` on password hashes; never return secrets in DTOs. That is **not** the `transient` keyword (Jackson ignores `transient` only if configured).
+
+## Custom immutable class (recording 64)
+
+“Cannot change after construction.” Recipe:
+
+1. `final` class (no subclass mutating state).
+2. `private final` fields.
+3. **Public** constructor or static factory that assigns fields (private constructor only if you also expose `of(...)`).
+4. **No setters.**
+5. If a field is a collection, store an **unmodifiable defensive copy**.
+6. Getters return unmodifiable views or copies of mutable internals.
+
+Records are immutable **for the references they hold**. A `record Box(List<String> items)` is not deep-immutable if callers mutate the list — copy in the compact constructor.
 
 ## `@Transactional` (you were close — tighten it)
 

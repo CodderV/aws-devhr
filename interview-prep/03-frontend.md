@@ -14,14 +14,17 @@ We use **micro-frontends as plugins/widgets**. App fabric / portal composes inde
 | SUBS-UI subscription work | Redux Toolkit + RTK Query | RTK Query cache |
 | Discover merchant boarding | Angular 8 services + component state (NgRx only if you actually used it — if not, say services/RxJS) | HTTP client |
 
-**Hooks (correct, short):**
+**Hooks (correct, short) — recording 65 mixed these up:**
 
 - `useState` — local UI state (selected row, form fields).
-- `useReducer` — related state updates (cart/board add/remove).
+- `useReducer` — related state updates (board add/remove, multi-field form). **Not a cache.** You dispatch actions; React holds the next state in memory for that plugin tree.
 - `useContext` — avoid prop drilling across plugin tree.
-- `useMemo` — **expensive derived values**, not “stop reload.”
-- `useCallback` — stable function identity for memoized children, **not** “parent to nth child communication.”
-- `useEffect` — sync with external systems (subscription, document title). Do **not** fetch in a chain of effects if Apollo/RTK Query already owns the query. You told them some devs overused `useEffect`; the fix is query libraries or a single effect with a proper dependency array — not replacing fetch with `useMemo`.
+- `useMemo` — **cache an expensive computed value** (`const sorted = useMemo(() => [...rows].sort(...), [rows])`). It does **not** memorize a function, and it does **not** stop page reloads.
+- `useCallback` — cache a **function identity** so memoized children do not see a new prop every render.
+- `React.memo(Component)` — skip **re-rendering a component** when props are shallow-equal. Different from `useMemo`. Learn one sentence: “memo wraps a component; useMemo wraps a value; useCallback wraps a function.”
+- `useEffect` — run **side effects after paint** (subscribe, set document title). It does **not** reload the page. Empty deps `[]` → run once after mount. Missing deps → stale closures. Do **not** fetch in a chain of effects if Apollo/RTK Query already owns the query.
+
+**If they ask “purpose of useReducer” (rec 65):** “When the next state depends on the previous state through a few action types — add/remove/reset — I use useReducer instead of several useState setters. API data still lives in Apollo/RTK Query or a fetch hook; the reducer does not replace the server cache.”
 
 ## Performance talking points (ASTON Q15 + recording)
 

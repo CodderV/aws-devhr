@@ -16,7 +16,13 @@ ASTON asked Docker benefits and AWS scalability. Virtusa asked docker image. Rec
 
 **Multi-stage build (interview-level):** compile in a Maven image, copy the JAR into a slim JRE image — smaller attack surface.
 
+**Dockerfile vs “Docker YAML” (recording 65):** the **image** is built from a **Dockerfile**. `docker-compose.yml` is optional for **local** multi-container runs. Do not say the pipeline “uses a Docker YAML to configure the container” unless you mean Compose for laptop only.
+
 **What you should not claim:** you wrote every Helm chart. You **consume** images and CronJob manifests and can read `kubectl` logs.
+
+**Validate the image in CI:** Dockerfile builds; unit/integration tests; (if you have it) Trivy/scan; smoke `docker run` or a compose stack; only then push the **digest** to the registry. Argo CD is **not** the image validator — it syncs a **already built** image into the cluster.
+
+**Why Docker (rec 65, keep this):** same artifact from laptop → CI → pre-prod → prod, so JDK/OS drift is not a production bug.
 
 ## Kubernetes objects (minimum senior set)
 
@@ -36,7 +42,17 @@ ASTON asked Docker benefits and AWS scalability. Virtusa asked docker image. Rec
 
 **Reliability:** liveness (restart deadlocks) vs readiness (stop traffic until up). Pod disruption budgets if you know them; otherwise rolling updates + multiple replicas.
 
+**Ingress (rec 65):** HTTP router at the cluster edge — host/path → Service → pods. It does not “check the request path” instead of the app; it **selects which Service** gets the request (and TLS). AuthZ still belongs in the service.
+
+**Manifests you should name:** `Deployment` (replicas, image, probes), `Service` (stable DNS), `Ingress` (or gateway), `CronJob` for exemption, `ConfigMap`/`Secret`. “I did not author the platform chart; I can read and change image tag, replicas, and Cron schedule.”
+
+**Argo CD:** **GitOps** — cluster state matches Git. The UI shows sync/health and you can rollback a sync. Monitoring pods is a **side effect of the dashboard**, not the reason you use Argo. Day-to-day you may only watch the UI; still say GitOps first.
+
 **IKS** on your resume = IBM Kubernetes Service / Intuit’s K8s — say “managed Kubernetes.”
+
+**Local without Argo (rec 65):** `mvn spring-boot:run` or IDE; `docker compose up` for Redis/DB; Swagger/OpenAPI for the API. That is correct — keep it.
+
+**S3 (rec 65):** tax-exemption **certificate files**. Say durability + private bucket + pre-signed upload if that is true; metadata stays in the DB.
 
 ## CI/CD as you described it (keep this story)
 
@@ -52,7 +68,7 @@ ASTON asked Docker benefits and AWS scalability. Virtusa asked docker image. Rec
 
 - **Reliability:** multi-AZ; ALB health checks; RDS Multi-AZ; S3 durable static assets (you mentioned CDN for images).
 - **Scalability:** ASG or EKS HPA; cache (ElastiCache/Redis); do not put sessions on the instance.
-- **Security:** SG least privilege, IAM roles for pods/instances, secrets not in images.
+- **Security:** SG least privilege, IAM roles for pods/instances, secrets not in images. **HashiCorp Vault** (or K8s Secret synced from Vault) for DB passwords and API keys. The pod authenticates to Vault with **Kubernetes/AppRole**, not with the user’s JWT. Spring reads `VAULT_` env or a mounted file. If you did not write the Vault policy, say so: “I consume secrets; platform owns the cluster auth.”
 - **Deploy:** immutable AMIs or EKS images; blue/green or rolling.
 
 If they drill VPC/CIDR and you are weak: “I partner with platform teams on account-level networking; I own the app Deployment, probes, and autoscaling policies.”

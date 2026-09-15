@@ -8,6 +8,8 @@ On the backend I work with Java 21 and Spring Boot microservices. On the fronten
 
 My current client is Intuit QuickBooks: subscription and product-table management for **direct** customers and **accountants** who manage multiple firms. Eligibility drives upgrade and downgrade. A feature I owned end to end is **sales tax exemption**: previously a care agent processed requests manually; we let the customer raise and track the request. The UI is a React plugin. Backend processing is a Kubernetes CronJob that runs an in-process **orchestration Saga**. We deploy Docker images on Kubernetes and troubleshoot with Splunk.
 
+My designation is Senior Lead; on the Intuit engagement I work as an **individual contributor**. Full-time Intuit staff own squad leadership and agile ceremonies. I still own analysis, implementation, deployment, and production support for my features.
+
 I also mentor juniors, do code reviews, and use Cursor and Claude at Intuit for tech-refresh work, not as a substitute for design or production judgment.
 
 **Stop here.** Wait for the next question.
@@ -37,6 +39,9 @@ Interviewers compare your resume to what you say. Use **one sentence per project
 | Angular vs React | Both on resume | Four years React, Angular before that | Lead with React for Intuit roles; mention Angular 8 for Discover if they ask state management. |
 | Cloud | AWS, IKS, PCF, OpenShift | Asked “do you have cloud?” | “Production delivery is Kubernetes (IKS) and Docker, with Argo CD and Jenkins. I have worked in AWS-hosted environments and used CloudWatch in some troubleshooting, but I am stronger on K8s + Splunk than on designing a green-field AWS account from scratch.” |
 | Banking capstone | 10-service platform in progress | Easy to overclaim | “Personal design exercise for interviews: gateway, JWT, Eureka, Resilience4j. Not a production bank.” |
+| Redis | Cache on resume | Rec 65: “Hibernate second-level cache” + “session LRU” + called `useReducer` a cache | “Redis is a shared store: session or hot reads with **TTL**. Hibernate L2 only if we actually wired it. React `useReducer` is UI state, not a cache.” |
+| Vault | Secrets | Rec 65: “OAuth2 link to HashiCorp container” | “Secrets live in **Vault** (or K8s Secret from Vault). The app reads env/file at startup. User login is JWT/OAuth2 — that is not how Vault is configured.” |
+| Title | Senior Lead | Rec 65 mixed lead vs IC | “Title is Senior Lead; on Intuit I am an IC delivering features. I mentor and review; I do not run the Intuit sprint process.” |
 
 ## 2-minute architecture (HLD §21, your voice)
 
@@ -65,6 +70,6 @@ I use **Cursor and Claude** at Intuit for Java 21 mechanical migration, boilerpl
 ## Practice checklist
 
 - [ ] 90s intro under 100 seconds
-- [ ] Contradiction sheet: Redux, Kafka, cloud, capstone
+- [ ] Contradiction sheet: Redux, Kafka, cloud, capstone, Redis vs useReducer, Vault vs OAuth2
 - [ ] Mentoring in 45 seconds
 - [ ] AI answer without saying “AI built the feature”

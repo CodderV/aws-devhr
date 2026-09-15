@@ -45,6 +45,17 @@ ORDER BY salary DESC
 LIMIT 1 OFFSET 1;
 ```
 
+## Third-highest salary (recording 64)
+
+Same pattern as second-highest; filter `r = 3`. Ties: `DENSE_RANK` (two people with the same top salary both rank 1, next is 2). `ROW_NUMBER` splits ties. `LIMIT 1 OFFSET 2` is wrong when duplicates exist.
+
+```sql
+SELECT salary FROM (
+  SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS r
+  FROM employee
+) t WHERE r = 3;
+```
+
 ## Top three customers by order amount (ASTON Q20)
 
 ```sql
@@ -77,6 +88,24 @@ static Character firstNonRepeating(String s) {
 ```
 
 If you forget `groupingBy` downstream: loop once into `LinkedHashMap<Character,Integer>`, then stream entries.
+
+## Least-repeated character (recording 64)
+
+They asked for the character with the **lowest frequency** (not “first unique”). Ties: pick insertion order or the first min — **state the tie rule** before coding.
+
+```java
+static Character leastRepeated(String s) {
+    Map<Character, Long> counts = s.chars()
+        .mapToObj(c -> (char) c)
+        .collect(Collectors.groupingBy(c -> c, LinkedHashMap::new, Collectors.counting()));
+    return counts.entrySet().stream()
+        .min(Map.Entry.comparingByValue())
+        .map(Map.Entry::getKey)
+        .orElse(null);
+}
+```
+
+If they wanted first **non-repeating**, use the unique-char snippet above (`count == 1`). Confirm the problem in one sentence.
 
 ## Customer transactions (ASTON Q17)
 

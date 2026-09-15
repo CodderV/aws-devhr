@@ -83,6 +83,22 @@ You mixed “gates” in the interview. Use **Closed / Open / Half-open** only.
 
 You: “I have worked on the consumer side — processing records, committing offsets, keeping handlers idempotent.” Do not design a 50-partition cluster if you did not.
 
+## Redis strategy (recording 65 — stay honest)
+
+Do **not** call Redis “the frontend cache” or mix it with `useReducer`.
+
+Typical uses you can defend:
+
+- **TTL cache-aside:** read DB on miss; set key with TTL; on write, **delete** the key (or publish a cache event — Virtusa).
+- **Session store:** gateway/auth session id in Redis with TTL so pods stay stateless.
+- **Lock:** exemption record lock with TTL (HLD overlap).
+
+**LRU** is Redis `maxmemory-policy` (`allkeys-lru` / `volatile-lru`) when memory is full. Only claim LRU if you or platform set that policy. TTL is the policy you should always mention for sessions.
+
+Hibernate **second-level cache** is a specific JPA integration. Do not say “Redis is our L2 cache” unless the `RegionFactory` was actually Redis.
+
+Retry, fallback, and circuit breaker are **not** “callback patterns.” Retry = try again; fallback = degraded response; CB = stop calling. See the table below.
+
 ## Cache events (Virtusa L2)
 
 Typical pattern: write DB, publish `CustomerUpdated`, cache consumer **evicts or refreshes Redis**. Risk: DB commit vs publish (outbox if they go deep). Simpler answer: TTL + explicit eviction on writes you own. Tax exemption status: do not cache “approved” without TTL if downstream can reverse.
