@@ -39,40 +39,37 @@ Implement only what they asked. Exception handling: catch specific, wrap in doma
 
 ---
 
-## ASTON / Recording 67 (2026-09-11, ~53 min)
+## ASTON / Recording 67 (2026-09-11, ~53 min) — TurboScribe (~30 min) + rest
 
-Same question list as “most technical questions.” ASR names you **Puevo Patel**; tools came out **Cloud Board / Cursory**. Speak **Vaibhav**, **Claude**, **Cursor**.
+Interviewer **Shravan** (architect). Coordinator **Nishant**. ASR: **Vibro / Koivo**, **cloud port**, **Gravel VM**, **Alvara**, **RedJX**, **Discord card**, **EMVG**, **FedEase**. Speak **Vaibhav Patil**, **Claude**, **Avalara**, **RxJS**, **Discover**, **GraalVM**.
 
-**1. Yourself and stack** — 90s intro in [01](01-intro-and-accuracy.md). Do not ramble MCP in the intro.
+Free TurboScribe stopped at the **CustomerTransaction** Streams prompt. Q18–25 still use the notes below.
 
-**2. Cloud AWS/Azure/GCP** — AWS-hosted / CloudWatch / S3; **not Azure**. Day to day is K8s. [07](07-docker-k8s-cicd-aws.md).
+**1. Intro** — 90s script in [01](01-intro-and-accuracy.md). Employer: **Virtusa** (Plug and Play), client **Intuit**, product **QuickBooks**. Do not open with MCP.
 
-**3. AI tools** — Cursor + Claude for coding and Java 21 refresh; MCP only if you used it; no LLM training; paid tools if that is policy. [01](01-intro-and-accuracy.md).
+**2. Cloud** — AWS yes, Azure no. Then stay on K8s. [07](07-docker-k8s-cicd-aws.md).
 
-**4. Scalable backend challenges**  
-Keep: Java 8→21, records/sealed, React class→function + TS, GraphQL instead of fat REST, Splunk + Chrome perf, indexes/native SQL, smaller bundles.  
-Drop unless true: virtual threads in prod, GraalVM made Boot 3 faster.  
-Also valid: HPA, CB, Cron overlap, TES idempotency.
+**3. AI** — **Claude** and **Cursor**. Cursor **skills** + **MCP** only if true. Cypress is tests, not an LLM. No model training. Paid tools. You **shared the whole screen** with an editor — close secrets first. [01](01-intro-and-accuracy.md).
 
-**5. REST + communication** — `POST /exemption-requests`, 201, GET by id, Feign timeouts. Then gateway, rate limit, Redis, LB. Rec 67 skipped the resource design. [02](02-request-path-ui-to-k8s.md).
+**4. Challenges**  
+Keep: Java 8→21 and Boot 2→3 (needs 17), records/sealed, class→function + TS, GraphQL vs fat REST, Splunk + Chrome, native SQL, smaller bundles.  
+“Trying virtual threads” is OK. **GraalVM made Boot 3 faster** — drop unless native-image shipped.
 
-**6. Sync vs async** — HTTP waits. User create = 201. Cron + orchestration Saga = deferred work. **Not** Kafka for those six steps. [05](05-distributed-microservices.md).
+**5. REST + communication** — Shravan asked **how you design the endpoint**. Lead with `POST /exemption-requests` → 201, GET by id, idempotency, Feign timeouts. SOLID/Docker/gateway/LB/Redis are not the API design. [02](02-request-path-ui-to-k8s.md).
 
-**7. Why Cron** — care-agent manual work did not scale; batch to TES. Optional **only if true**: email + Avalara cert window + one open request. [02](02-request-path-ui-to-k8s.md).
+**6–7. Sync / Cron / Avalara** — Create → **201 CREATED**. Cron ~30 min. Email → **Avalara** upload, **30 days**, **one open request**. Status created → in progress → completed after vendor verify. **Keep:** this workflow is **not Kafka**; small scheduled Saga. [02](02-request-path-ui-to-k8s.md), [05](05-distributed-microservices.md).
 
-**8. Kafka** — topic / partition / consumer group / offset / poll. Rec 67 “split file into topics, broker finds consumers” is wrong. [05](05-distributed-microservices.md).
+**8. Kafka** — topic / **partition** / consumer group / offset / **poll**. Not “split a file into topics.” [05](05-distributed-microservices.md).
 
-**9. Retry** — `@Retry` / Resilience4j on **transient** errors. Circuit breaker is **Closed/Open/Half-open**, not gates. Do not retry in **open**. [05](05-distributed-microservices.md).
+**9. Retry** — `@Retry` (ASR “accurate retry”) on transients. CB: Closed / Open / Half-open — not gates, not “that port.” [05](05-distributed-microservices.md).
 
-**10. Ack** — HTTP status or Kafka commit. Correlation id is tracing (Splunk). Not Mongo key-value “because we are small.” [05](05-distributed-microservices.md), [08](08-observability-prod.md).
+**10. Ack** — HTTP status or Kafka commit. **TID / correlation id** is tracing. ASR **FedEase**: do not invent Mongo as an ack store. [08](08-observability-prod.md).
 
-**11–12. Docker** — Dockerfile, same digest, pods scale. Not “Docker YAML” unless Compose local. [07](07-docker-k8s-cicd-aws.md).
+**11–12. Docker** — same image across env. **Dockerfile**, not Docker.yaml. Helm charts ≠ JVM image. Scale pods. [07](07-docker-k8s-cicd-aws.md).
 
-**13. AWS** — S3, CloudWatch, K8s reliability story. Kinesis/Lambda/Spring Cloud AWS only if shipped. [07](07-docker-k8s-cicd-aws.md).
+**13. AWS** — S3 + CloudWatch. Kinesis/Lambda/Spring Cloud AWS only if shipped. [07](07-docker-k8s-cicd-aws.md).
 
-**14. React or Angular** — React ~4 years Intuit; Angular 8 Discover.
-
-**15. Angular state + perf** — services + RxJS, pagination, `async` pipe. Not “engine model.” [03](03-frontend.md).
+**14–15. Angular (Discover merchant boarding)** — Shravan rejected **ngModel** as state (that is **data binding**). Say services + **RxJS**, pagination, `async` pipe, **OnPush**. Not “EMVG.” You were ~4 years off Angular and guessed **v19** — do not claim 19 in prod; Discover was **Angular 8**. [03](03-frontend.md).
 
 **16. Able to write lots of code?** — Yes, but live syntax without an assistant is something I drill. Then do the exercise.
 
@@ -198,57 +195,45 @@ Also valid: HPA, CB, Cron overlap, TES idempotency.
 
 ---
 
-## Recording 65 (2026-09-15) — serialization, scopes, Redis, CI/CD, React hooks, JWT
+## Recording 65 (2026-09-15) — TurboScribe (first ~30 min) + rest of panel
 
-~40 minutes. Several answers were directionally right and **worded wrong**. Speak the lines below, not the transcript.
+Panel: recruiter **Anjali**, interviewer **Amar**. ~40 min total; free TurboScribe cut at `useEffect` deps. ASR also wrote **Fitbook**, **SADA**, **RBCD**, **DTL**, **LUR**.
 
-**Intro / years / structure** — 90s script in [01](01-intro-and-accuracy.md). Frontend: React ~4 years, Angular ~3. Backend 12. Tax exemption = plugin + K8s Cron + orchestration Saga. S3 (or equivalent object store) for **certificates**.
+**Intro** — 90s script in [01](01-intro-and-accuracy.md). Say **Vaibhav Patil**, **full-stack**, **QuickBooks**, **sales tax** exemption. Stop after Cron + Saga; wait.
 
-**Title** — Senior Lead on paper; **IC** on Intuit. [01](01-intro-and-accuracy.md).
+**Years (critical)** — React **four**, Angular **three**. Backend/Java **twelve**. TurboScribe has “on the back-end I have **2** years.” If you said two, that contradicts the intro. Speak **twelve** slowly. Do not invent a 2-year backend career.
 
-**Serialization** — Java `Serializable` for object streams; `transient` hides a field. REST APIs: Jackson `@JsonIgnore`. [04](04-backend-java-spring.md).
+**Serialization** — data over the wire / `ObjectOutputStream`; `transient` for Java-serializable fields. REST: `@JsonIgnore`. A→B→C: **yes**, C is serializable. Block C: `private void writeObject` / `readObject` throw **`NotSerializableException`**. You stalled (“not sure, don’t want to give false information”) until Amar said throw. Memorize the exception name. [04](04-backend-java-spring.md).
 
-**A serializable → B → C** — **yes**, C serializes.
+**Bean scopes** — singleton (default), prototype, request, session. This part was clean.
 
-**Prevent C** — `writeObject`/`readObject` throw `NotSerializableException`. Not “override serializable.”
+**Redis** — session store **or** cache-aside with **TTL**. Interviewer wanted **TTL + LRU**. Say those words; not DTL/LUR. Do not call Redis Hibernate L2 unless wired. Do not mention `useReducer` in the backend caching answer. [05](05-distributed-microservices.md).
 
-**Bean scopes** — default **singleton**; also prototype, request, session. [04](04-backend-java-spring.md).
+**Patterns** — **Saga** (not SADA), API gateway, circuit breaker, retry, compensate. Retry and fallback are not the same as the breaker. [05](05-distributed-microservices.md).
 
-**Caching** — Redis with **TTL** (sessions or cache-aside). LRU only if `maxmemory-policy` is LRU. **`useReducer` is not caching.** [05](05-distributed-microservices.md), [03](03-frontend.md).
+**AWS honesty** — S3 for **tax certificates**, CloudWatch. “Not a cloud architect.” Good — keep.
 
-**Microservice patterns** — Saga, API gateway, circuit breaker, retry, fallback. Do not bundle retry/fallback as “callbacks.” [05](05-distributed-microservices.md).
+**CI/CD** — merge to main → **Jenkins** (exploring GitHub Actions) → test → **Dockerfile** (not Docker YAML) → image → registry → cluster. Secrets: Vault/K8s Secret, not in the image. [07](07-docker-k8s-cicd-aws.md).
 
-**Docker / K8s / AWS** — ~5 years containers; AWS shallow: **S3 certificates**, CloudWatch if used. [07](07-docker-k8s-cicd-aws.md).
+**Validate image** — unit/integration tests in Jenkins, then image build, then optional scan (Trivy/Aqua if the org has it). **Argo CD is not the image validator.** You pointed at an “internal portal / Argo” — Amar was asking CI.
 
-**CI/CD** — Git → Jenkins (exploring GHA) → test → **Dockerfile** image → registry → K8s (Argo CD GitOps). Ingress routes host/path to a Service. Horizontal scale = more replicas, not “ports deploy containers.”
+**Argo CD** — say **Argo CD** (not RBCD). GitOps: Git is source of truth. You use the **dashboard** for sync/health/rollback/replicas; you did not write the Application manifest. That is an honest senior answer if you add GitOps in one sentence.
 
-**Validate image** — CI tests + successful image build (+ scan). Argo health is **deploy** validation, not build validation.
+**Never say** “I don’t remember Kubernetes” / “we only use the dashboard.” Name four objects: **Deployment** (pods, image, probes), **Service** (stable DNS — Amar asked this and you missed it), **Ingress** (HTTP host/path → Service, TLS), **CronJob** (exemption). Ingress is not a load balancer and not “an engine.” LB is often cloud/NLB in front or `Service type: LoadBalancer`. Rate limit is usually gateway/mesh, not the Ingress file you wrote.
 
-**Argo CD** — GitOps sync + UI for health/rollback. You may only use the dashboard; still say GitOps.
+**Local** — `spring-boot:run`, Docker Compose, Swagger. Good.
 
-**K8s files** — Deployment, Service, Ingress, CronJob. Honest: platform did one-time setup.
+**Why Docker** — same artifact, same JDK/libs, no “works in pre-prod.” Good.
 
-**Local** — Spring Boot run, compose, Swagger. Good — keep.
+**React delivery** — plugins/widgets, app fabric, pin version, local override, class → function, TS, React 16→18, drop deps, GraphQL for fat REST. Good. [03](03-frontend.md).
 
-**Why Docker** — parity across env. Good — keep.
+**`useReducer`** — Amar asked purpose. Do **not** say it picks which component after an API. Dispatch + reducer for related UI state. Data fetching stays Apollo/RTK Query.
 
-**React process** — plugins, app fabric pin, React 16→18, TS, GraphQL fields, drop dead deps. [03](03-frontend.md).
+**Redux Toolkit (you blanked)** — even if the plugin is Context: “On SUBS-UI we used RTK. You `configureStore`, `createSlice` for reducers, wrap with `Provider`. Async: `createAsyncThunk` or **RTK Query** `createApi`.” Do not say you never implemented it if the resume lists RTK Query.
 
-**`useReducer`** — action-driven UI state, not “which component to trigger after API.”
+**`useEffect`** — after paint, **not** page reload. Deps array: values that must re-run the effect; `[]` once on mount. Transcript ended here.
 
-**Redux** — know it; daily plugin is Context + reducer; RTK on SUBS-UI. [01](01-intro-and-accuracy.md).
-
-**`useEffect`** — after-render side effect; **not** a page reload. `[]` = mount once.
-
-**`useMemo` vs `React.memo`** — value vs component. You had only used `useMemo` — learn the one-liner in [03](03-frontend.md).
-
-**Vault** — secret store for the **workload**. K8s/AppRole into Vault. Not “OAuth2 link to the Vault container.” User JWT is separate. [07](07-docker-k8s-cicd-aws.md).
-
-**OAuth2 + JWT** — login → JWT (payload + signature) → filter validates → roles. Good skeleton; do not say the filter throws to `@ExceptionHandler`.
-
-**Exceptions** — `@RestControllerAdvice` for controllers. JWT layer: **AuthenticationEntryPoint 401**. [04](04-backend-java-spring.md).
-
-**`@RestControllerAdvice` for JWT** — usually **no**. Entry point / access-denied handler. Resolver-from-filter only if they push.
+**Second half (earlier notes, still drill)** — `useMemo` vs `React.memo`; Vault vs user OAuth; JWT filter **401 entry point**, not `@ExceptionHandler`. [03](03-frontend.md), [04](04-backend-java-spring.md), [07](07-docker-k8s-cicd-aws.md).
 
 ---
 

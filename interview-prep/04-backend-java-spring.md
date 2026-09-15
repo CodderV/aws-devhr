@@ -70,7 +70,7 @@ Interviewers often mean **Java `Serializable`**, while production APIs use **Jac
 
 **Inheritance:** if class A implements `Serializable`, B and C that extend it **are serializable** even if they do not declare it.
 
-**Stop C from serializing:** you cannot “un-implement” `Serializable`. In C, implement `private void writeObject(ObjectOutputStream out)` and `readObject` and **throw `NotSerializableException`**. `transient` on fields is not enough to block the whole type. Do not say “override the serializable method.”
+**Stop C from serializing:** you cannot “un-implement” `Serializable`. In C, implement `private void writeObject(ObjectOutputStream out)` and `readObject` and **throw `NotSerializableException`**. That is the line Amar was waiting for in rec 65. `transient` on fields is not enough to block the whole type. Do not say only “override the serializable method.”
 
 **REST/JSON (what you actually ship):** `@JsonIgnore` / `@JsonIgnoreProperties` on password hashes; never return secrets in DTOs. That is **not** the `transient` keyword (Jackson ignores `transient` only if configured).
 

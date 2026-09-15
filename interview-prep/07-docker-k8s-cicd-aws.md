@@ -44,7 +44,7 @@ ASTON asked Docker benefits and AWS scalability. Virtusa asked docker image. Rec
 
 **Ingress (rec 65):** HTTP router at the cluster edge — host/path → Service → pods. It does not “check the request path” instead of the app; it **selects which Service** gets the request (and TLS). AuthZ still belongs in the service.
 
-**Manifests you should name:** `Deployment` (replicas, image, probes), `Service` (stable DNS), `Ingress` (or gateway), `CronJob` for exemption, `ConfigMap`/`Secret`. “I did not author the platform chart; I can read and change image tag, replicas, and Cron schedule.”
+**Never freeze on “which YAML” (recording 65):** Deployment, **Service**, Ingress, CronJob. Amar asked for Service after Deployment; “I don’t remember, we use Argo CD” sounded like you do not use Kubernetes. The dashboard still sits on those objects.
 
 **Argo CD:** **GitOps** — cluster state matches Git. The UI shows sync/health and you can rollback a sync. Monitoring pods is a **side effect of the dashboard**, not the reason you use Argo. Day-to-day you may only watch the UI; still say GitOps first.
 

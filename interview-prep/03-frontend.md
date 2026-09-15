@@ -26,6 +26,29 @@ We use **micro-frontends as plugins/widgets**. App fabric / portal composes inde
 
 **If they ask “purpose of useReducer” (rec 65):** “When the next state depends on the previous state through a few action types — add/remove/reset — I use useReducer instead of several useState setters. API data still lives in Apollo/RTK Query or a fetch hook; the reducer does not replace the server cache.”
 
+**Redux Toolkit setup (rec 65 blank):** Amar asked which function/components you write to configure RTK. Minimum:
+
+```js
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+
+const boardSlice = createSlice({
+  name: "board",
+  initialState: { items: [] },
+  reducers: {
+    add: (state, action) => { state.items.push(action.payload); },
+    remove: (state, action) => {
+      state.items = state.items.filter((x) => x.id !== action.payload);
+    },
+  },
+});
+
+const store = configureStore({ reducer: { board: boardSlice.reducer } });
+// <Provider store={store}><App /></Provider>
+```
+
+Async: `createAsyncThunk` or RTK Query `createApi`. Resume line: SUBS-UI used RTK Query; QuickBooks plugin uses Context + `useReducer`.
+
 ## Performance talking points (ASTON Q15 + recording)
 
 - **Pagination** from the API (`limit`/`offset` or cursor) for thousands of rows. Do not render 10,000 DOM nodes.
@@ -46,7 +69,7 @@ We use **micro-frontends as plugins/widgets**. App fabric / portal composes inde
 
 Class components/services, `*ngIf`/`*ngFor`, `async` pipe for observables, change detection. State: lift to a service with `BehaviorSubject` unless you truly used NgRx. Performance: `OnPush`, trackBy, pagination. Do not mix Angular vocabulary into a React coding round.
 
-**Recording 67 “engine model”:** they heard **NgModel** / **NgModule**. Say: “**NgModule** (or standalone components in later Angular) for compilation units. State was **services + RxJS**, not two-way binding as the architecture. Pagination for large lists. `async` pipe so we unsubscribe.” If you never used NgRx, do not invent it.
+**Recording 67 (Shravan):** Discover **merchant boarding**, not “Discord.” **`ngModel` is two-way binding**, not the state architecture — he cut you off. State: injectable **service** + RxJS. Perf: pagination, `async` pipe, **OnPush**, `trackBy`. Angular is often described as **MVVM**, not “EMVG.” You said you have not used Angular in ~4 years and mentioned **v19** — say you would ramp; production memory is **Angular 8**. Do not mix in React “prompt.”
 
 ## Timed drill (also in file 10)
 

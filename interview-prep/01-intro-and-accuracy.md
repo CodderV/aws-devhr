@@ -21,6 +21,8 @@ I also mentor juniors, do code reviews, and use Cursor and Claude at Intuit for 
 - Do not call the personal banking capstone a production system.
 - Do not say **Cloud Board** or **Cursory** — the tools are **Claude** and **Cursor**.
 - Do not claim **GraalVM native**, **virtual threads in prod**, **Kinesis**, or **Lambda** unless you shipped them.
+- Rec 65: do not say backend experience is **two years**. Do not say **SADA**, **RBCD**, or “I don’t remember Kubernetes.”
+- Rec 67: **ngModel is not state management.** Do not claim Angular **19** as a production version you shipped.
 
 ## Clean migration stories (pick one when asked)
 
@@ -44,10 +46,14 @@ Interviewers compare your resume to what you say. Use **one sentence per project
 | Redis | Cache on resume | Rec 65: “Hibernate second-level cache” + “session LRU” + called `useReducer` a cache | “Redis is a shared store: session or hot reads with **TTL**. Hibernate L2 only if we actually wired it. React `useReducer` is UI state, not a cache.” |
 | Vault | Secrets | Rec 65: “OAuth2 link to HashiCorp container” | “Secrets live in **Vault** (or K8s Secret from Vault). The app reads env/file at startup. User login is JWT/OAuth2 — that is not how Vault is configured.” |
 | Title | Senior Lead | Rec 65 mixed lead vs IC | “Title is Senior Lead; on Intuit I am an IC delivering features. I mentor and review; I do not run the Intuit sprint process.” |
-| AI tool names | Cursor, Claude | Rec 67 ASR: Cloud Board, Cursory, “the skin” + MCP | “**Cursor** and **Claude**. I have used MCP servers in Cursor when we wired them. I have not trained LLMs. Cypress generation is an experiment, not my production test strategy.” |
+| AI tool names | Cursor, Claude | Rec 67: cloud port, Cursor, skill + MCP; screen share | “**Claude** and **Cursor**. Skills/MCP if we wired them. Cypress is tests, not GenAI. Close the editor before sharing.” |
 | Java 21 extras | Records, sealed | Rec 67: virtual threads + GraalVM made Spring 3 faster | “Records and sealed classes we adopted. Virtual threads and GraalVM native I will mention only if we actually enabled them — otherwise ‘evaluated, not in my services.’” |
-| Exemption UX | Plugin upload + Cron Saga (HLD) | Rec 67: email → Avalara/Alvara portal, 30 days, one open request, cron every 30 min | Pick **one** true path. If Avalara verifies the cert, say that after `201` create. If the PDF is plugin upload into S3 then Saga, say that. Do not mix both. |
-| Kafka ack | Consumer commit / producer acks | Rec 67: correlation id / “tides”, store in Mongo for large systems | Correlation id is **tracing**, not Kafka ack. Ack = HTTP status or offset commit. [05](05-distributed-microservices.md). |
+| Exemption UX | Plugin upload + Cron Saga (HLD) | Rec 67 TurboScribe: 201 → email → **Avalara**, 30 days, one open request, cron 30 min; **no Kafka because small** | Use Avalara if that is real. Keep “not Kafka.” Do not also describe in-plugin-only upload in the same answer. |
+| Angular currency | Angular 8 Discover | Rec 67: ngModel as state; guessed Angular 19; four years off | “Discover merchant boarding, Angular 8. State: services + RxJS. ngModel is binding. I would need a short ramp on current Angular; daily is React.” |
+| Kafka ack | Consumer commit / producer acks | Rec 67: TID at gateway; ASR **FedEase**; Mongo for large apps | Tracing id in logs/MDC. Not a NoSQL ack database. |
+| Years | 12 Java | Rec 65 TurboScribe: “backend **2** years” after React 4 / Angular 3 | “**Twelve** years backend/Java. **Four** React. **Three** Angular.” Enunciate twelve. |
+| Pronunciation | Saga, Argo CD, TTL, LRU | Rec 65: SADA, RBCD, DTL, LUR | Practice aloud once a day. |
+| K8s depth | Docker + K8s ~5 years | Rec 65: blanked **Service**, called Ingress an engine, “only Argo dashboard” | Four files: Deployment, Service, Ingress, CronJob. Dashboard ≠ “I don’t use K8s.” |
 
 ## 2-minute architecture (HLD §21, your voice)
 
@@ -55,7 +61,7 @@ At a high level the product is a React frontend with **plugins**. The browser ta
 
 A concrete workflow I owned is **tax exemption**. The customer uploads a certificate in the plugin. A **Kubernetes CronJob** triggers the Spring scheduler, which loads pending requests and runs each record through an **in-process orchestration Saga**: lock request, fetch account, build payload, create customer downstream, update our record, update IFS/TES status. A **processing context** stores the stage. If a step fails we stop, **compensate** earlier steps that need it, update retry/status, and continue the **next record**. That is not one distributed database transaction.
 
-**If they ask Kafka next:** “This workflow is synchronous steps plus a scheduler. Kafka is a different pattern we use when we need pub/sub and independent consumers.”
+**If they ask Kafka next:** “This workflow is a scheduled Saga. We did not put it on Kafka; the volume did not need a broker. Kafka is for pub/sub and independent consumers.”
 
 ## Mentoring (Fulcrum / ASTON)
 
