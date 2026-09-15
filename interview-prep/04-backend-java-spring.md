@@ -106,6 +106,8 @@ ACID is the **database transaction**, not the whole Saga. See [06-data-sql-acid-
 
 **Default methods** — evolve interfaces (e.g. `List.sort`) without breaking every implementor. Java 8 Streams APIs needed this.
 
+**Virtual threads (recording 67)** — Java 21 can run many blocking tasks cheaply (`Executors.newVirtualThreadPerTaskExecutor()`). Spring Boot 3.2+ can opt in. Say “we evaluated / not enabled on my services” unless you actually flipped the property. Do not pair this with GraalVM as the reason Boot 3 is faster.
+
 ## HashMap internals (fix this)
 
 1. `hashCode` of key, mixed, then index into table (`(n - 1) & hash`).
